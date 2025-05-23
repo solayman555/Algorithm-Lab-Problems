@@ -1,0 +1,18 @@
+#include<stdio.h>
+int main()
+{
+    int t,n,p;
+    scanf("%d",&t);
+    for(int i=1; i<=t; i++)
+    {
+        scanf("%d %d",&p,&n);
+        if(p<=n)
+            printf("Case %d: %d\n",i,4*n+19);
+            else
+            {
+                int z=4*(p-n);
+    printf("Case %d: %d\n",i,z+p*4+19);
+            }
+    }
+    return 0;
+}
