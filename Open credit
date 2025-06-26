@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+int maxSeniorJuniorDiff(int scores[], int n) {
+    int maxDiff = -1;
+    int maxScoreSoFar = scores[0];
+
+    for (int i = 1; i < n; i++) {
+        int diff = maxScoreSoFar - scores[i];
+        if (diff > maxDiff) {
+            maxDiff = diff;
+        }
+        if (scores[i] > maxScoreSoFar) {
+            maxScoreSoFar = scores[i];
+        }
+    }
+
+    return (maxDiff > 0) ? maxDiff : -1;
+}
+
+int main() {
+    int T;
+    scanf("%d", &T);
+
+    while (T--) {
+        int n;
+        scanf("%d", &n);
+
+        int scores[n];
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &scores[i]);
+        }
+
+        int result = maxSeniorJuniorDiff(scores, n);
+        printf("%d\n", result);
+    }
+
+    return 0;
+}
