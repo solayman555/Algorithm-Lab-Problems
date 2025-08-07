@@ -41,4 +41,40 @@ qsort
                 right--;
             }
         }
-
+////////EOF
+#include <math.h>
+#define EPSILON 1e-7
+double bisection(int p, int q, int r, int s, int t, int u) {
+    double lo = 0.0, hi = 1.0, mid;
+    while ((hi - lo) > EPSILON) {
+        mid = (lo + hi) / 2.0;
+        if (f(lo, p, q, r, s, t, u) * f(mid, p, q, r, s, t, u) <= 0)
+            hi = mid;
+        else
+            lo = mid;}
+    return (lo + hi) / 2.0;
+}
+int main() {
+    int p, q, r, s, t, u;
+    while (scanf("%d %d %d %d %d %d", &p, &q, &r, &s, &t, &u) != EOF) {
+        double f_lo = f(0.0, p, q, r, s, t, u);
+        double f_hi = f(1.0, p, q, r, s, t, u);
+        if (f_lo * f_hi > 0) {
+            printf("No solution\n");
+        } else {
+            double root = bisection(p, q, r, s, t, u);
+            printf("%.4f\n", root);
+        }
+    }
+///////////boundrey
+int upper_bound(int arr[], int n, int target) {
+    int left = 0, right = n;
+    while (left < right) {
+        int mid = (left + right) / 2;
+        if (arr[mid] <= target) ///for lower no =
+            left = mid + 1;
+        else
+            right = mid;
+    }
+    return left;
+}
