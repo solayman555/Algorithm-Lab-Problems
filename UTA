@@ -290,4 +290,22 @@ if (valid) {
             }}}
     return 0;
 }
+////////gredy
+#include <stdio.h>
+int main() {
+    int n;long long x;
+    scanf("%d %lld", &n, &x);
+    int p[n];     // prices
+    long long q[n];  // quantities (use long long for big values)
+    for(int i = 0; i < n; i++) {
+        scanf("%d", &p[i]);
+    }  for(int i = 0; i < n; i++) {  scanf("%lld", &q[i]);  }
+    long long total_hats = 0;
+    for (int i = 0; i < n; i++) {
+        if (x <= 0) break;
+        long long max_affordable = x / p[i];
+        if (max_affordable > q[i]) max_affordable = q[i];
+        total_hats += max_affordable;
+        x -= max_affordable * p[i];
+    }  printf("%lld\n", total_hats);   return 0;}
 
