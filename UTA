@@ -178,4 +178,116 @@ int main() {
     printf("%d\n", scc_count);
     return 0;
 }
-////////
+////////min coin
+#include <stdio.h>
+#include <limits.h>
+#define MAX_K 1000005
+#define INF 1000000000
+int dp[MAX_K];
+int min(int a, int b) {
+    return a < b ? a : b;}
+int main() {
+    int n, m, k;
+    scanf("%d %d %d", &n, &m, &k);
+    int A[1005], B[25];
+    for (int i = 0; i < n; i++)
+        scanf("%d", &A[i]);
+    for (int i = 0; i < m; i++)
+        scanf("%d", &B[i]);
+    for (int i = 0; i <= k; i++)
+        dp[i] = INF;
+
+    dp[0] = 0;
+    for (int i = 0; i < m; i++) {
+        int coin = B[i];
+        for (int j = coin; j <= k; j++) {
+            dp[j] = min(dp[j], dp[j - coin] + 1);
+        }}
+    int C = dp[k];
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (A[i] > C)
+            count++;
+    }
+    printf("%d\n", count);
+    return 0;}
+///////possible change
+#include <stdio.h>#include <string.h>#define MAX_K 100005#define MOD 1000000007 
+long long dp[MAX_K];
+int main(){
+    int m, k;
+    scanf("%d %d", &m, &k);
+    int coins[25];
+    for (int i = 0; i < m; i++)
+        scanf("%d", &coins[i]);
+    dp[0] = 1;
+    for (int i = 0; i < m; i++) {
+        int coin = coins[i];
+        for (int j = coin; j <= k; j++) {
+            dp[j] = (dp[j] + dp[j - coin]) % MOD;
+        }}
+    printf("Number of ways to make %d: %lld\n", k, dp[k]);
+    return 0;}
+//////////topsort
+#include <stdio.h>#include <stdlib.h>#define MAXN 100005
+int adj[MAXN][100];int deg[MAXN];int q[MAXN];int pos[MAXN];int idx[MAXN];int front, back;
+int cmp(const void* a, const void* b) {
+    return ((int*)a)[0] - ((int*)b)[0];
+}
+int main() {
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int n, m;
+        scanf("%d %d", &n, &m);
+        int adjCount[MAXN] = {0};
+        for (int i = 0; i <= n; i++) {
+            deg[i] = 0;
+        }for (int i = 0; i < m; i++) {
+            int u, v;
+            scanf("%d %d", &u, &v);
+            adj[u][adjCount[u]++] = v;
+            deg[v]++;
+        }front = back = 0;
+        for (int i = 1; i <= n; i++) {
+            if (deg[i] == 0) {
+                q[back++] = i;
+            }      }
+        int topSort[MAXN];
+        int index = 0;
+
+        while (front < back) {
+            int u = q[front++];
+            topSort[index++] = u;
+            for (int i = 0; i < adjCount[u]; i++) {
+                int v = adj[u][i];
+                deg[v]--;
+                if (deg[v] == 0) {
+                    q[back++] = v;
+                }}}
+        if (index < n) {
+            printf("NO\n"); // cycle exists
+        } else {
+            int valid = 1;
+            for (int i = 0; i < n; i++) {
+                pos[topSort[i]] = i;
+            }
+
+            for (int i = 1; i < n; i++) {
+                if (pos[i] > pos[i + 1]) {
+                    valid = 0;
+                    break;
+                }
+            }
+if (valid) {
+                printf("YES\n");
+                for (int i = 0; i < n; i++) {
+                    printf("%d ", topSort[i]);
+                }
+                printf("\n");
+            } else {
+                printf("NO\n");
+            }}}
+    return 0;
+}
+
