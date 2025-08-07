@@ -78,3 +78,104 @@ int upper_bound(int arr[], int n, int target) {
     }
     return left;
 }
+//////////0/1
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+int main() {
+    int N, W;
+    scanf("%d %d", &N, &W);
+
+    int y[201], s[201];
+    for (int i = 1; i <= N; i++) {
+        scanf("%d %d", &y[i], &s[i]);
+    }
+    int dp[100001] = {0};
+
+    for (int i = 1; i <= N; i++) {
+        for (int j = W; j >= s[i]; j--) {
+            dp[j] = max(dp[j], dp[j - s[i]] + y[i]);
+        }
+    }
+    printf("%d\n", dp[W]);
+    return 0;
+}
+///////////SCC
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX 100005
+typedef struct Node {
+    int v;
+    struct Node* next;
+} Node;
+Node* graph[MAX];
+Node* rev_graph[MAX];
+int visited[MAX];
+int stack[MAX];
+int top = -1;
+
+void push(int x) {
+    stack[++top] = x;
+}
+int pop() {
+    return stack[top--];
+}
+Node* newNode(int v) {
+    Node* temp = (Node*)malloc(sizeof(Node));
+    temp->v = v;
+    temp->next = NULL;
+    return temp;
+}
+void addEdge(Node* graph[], int u, int v) {
+    Node* temp = newNode(v);
+    temp->next = graph[u];
+    graph[u] = temp;
+}
+void dfs1(int u) {
+    visited[u] = 1;
+    Node* cur = graph[u];
+    while (cur) {
+        if (!visited[cur->v]) dfs1(cur->v);
+        cur = cur->next;
+    }
+    push(u);
+}
+void dfs2(int u) {
+    visited[u] = 1;
+    Node* cur = rev_graph[u];
+    while (cur) {
+        if (!visited[cur->v]) dfs2(cur->v);
+        cur = cur->next;
+    }
+}
+int main() {
+    int N, M;
+    scanf("%d %d", &N, &M);
+    for (int i = 1; i <= N; i++) {
+        graph[i] = NULL;
+        rev_graph[i] = NULL;
+    }
+    for (int i = 0; i < M; i++) {
+        int v, u;
+        scanf("%d %d", &v, &u); 
+        addEdge(graph, u, v);
+        addEdge(rev_graph, v, u);
+    }
+    memset(visited, 0, sizeof(visited));
+    for (int i = 1; i <= N; i++) {
+        if (!visited[i]) dfs1(i);
+    }
+    memset(visited, 0, sizeof(visited));
+    int scc_count = 0;
+    while (top != -1) {
+        int u = pop();
+        if (!visited[u]) {
+            dfs2(u);
+            scc_count++;
+        }
+    }
+    printf("%d\n", scc_count);
+    return 0;
+}
+////////
